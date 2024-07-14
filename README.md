@@ -1,4 +1,4 @@
-```
+
 
 API Projet Annuel
 Description
@@ -118,5 +118,3 @@ docker-compose up --build
 ```
 
 This will build the Docker images and start the services defined in the docker-compose.yml file.
-
-```
