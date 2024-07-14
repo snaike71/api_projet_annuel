@@ -1,120 +1,123 @@
+# API Projet Annuel - Documentation
 
+## Prérequis:
+Cette documentation explique comment configurer et lancer l'API projet annuel en local ou avec Docker.
 
-API Projet Annuel
-Description
-API Projet Annuel is a backend project designed to provide essential functionalities for your application. This project uses Node.js, Express, Sequelize, and MySQL for database management, along with JWT for authentication.
+Prérequis:
+- Node.js v18.x ou plus
+- Docker
+- Docker Compose
 
-Table of Contents
-Installation
-Usage
-Environment Variables
-Scripts
-Dependencies
-DevDependencies
-Docker
-Installation
-To get started with this project, clone the repository and install the necessary dependencies.
+## Configuration:
+Fichier `.env`
 
-```sh
-git clone https://github.com/your-repo/api_projet_annuel.git
-cd api_projet_annuel
-npm install
+Créez un fichier `.env` à la racine du projet en utilisant le template fourni ci-dessous :
+
 ```
-
-Usage
-You can start the server in production mode or in development mode. In development mode, the server will automatically restart on file changes.
-
-```sh
-
-Start the server
-npm start
-
-Start the server in development mode
-npm run dev
-```
-
-Environment Variables
-To run this project, you will need to add the following environment variables to your .env file. You can use the provided .env.template as a starting point.
-
-```sh
-NODE_ENV=production
+# .env.template
+NODE_ENV=development
 PORT=3000
 
-Database configuration
+# Database configuration
 DB_USERNAME=root
 DB_PASSWORD=root_password
 DB_DATABASE=test
-DB_HOST=db
+DB_HOST=localhost
 DB_PORT=3306
 DB_DIALECT=mysql
 
-JWT Secret
+# JWT Secret
 SECRET_API_KEY=your_secret_key
-
-Control wait-for-it script usage
-WAIT_FOR_DB=true
 ```
 
-Scripts
-start: Runs the server using node server.js.
-dev: Runs the server in development mode using nodemon.
-Dependencies
-async-retry: ^1.3.3
-bcrypt: ^5.1.1
-dotenv: ^16.4.5
-express: ^4.19.2
-express-validator: ^7.1.0
-jsonwebtoken: ^9.0.2
-mysql2: ^3.10.2
-sequelize: ^6.37.3
-sequelize-cli: ^6.6.2
-swagger-jsdoc: ^6.2.8
-swagger-ui-express: ^5.0.1
-DevDependencies
-nodemon: ^3.1.4
-Docker
-To run the application with Docker, you will need to create a docker-compose.yml file. Here is an example configuration:
+Renommez le fichier `.env.template` en `.env` et remplacez les valeurs par vos informations de configuration.
 
-```yaml
+## Lancer l'API en local:
+1. **Installer les dépendances**
+
+Assurez-vous que vous avez Node.js installé. Ensuite, exécutez la commande suivante pour installer les dépendances du projet :
+
+```
+npm install
+```
+
+2. **Configurer la base de données**
+
+Assurez-vous d'avoir une base de données MySQL en cours d'exécution et configurée selon les valeurs de votre fichier `.env`.
+
+3. **Démarrer le serveur**
+
+Pour démarrer le serveur en local, exécutez la commande suivante :
+
+```
+npm run start
+```
+
+## Lancer l'API avec Docker:
+
+### Créer une image Docker
+1. **Construire l'image Docker**
+
+```
+docker build -t votre_nom_d_utilisateur_dockerhub/api_projet_annuel .
+```
+
+2. **Pusher l'image Docker sur Docker Hub**
+
+```
+docker push votre_nom_d_utilisateur_dockerhub/api_projet_annuel
+```
+
+### Utiliser Docker Compose
+1. **Configurer le fichier `docker-compose.yml`**
+
+Voici un exemple de fichier `docker-compose.yml` :
+
+```
 version: '3.8'
 
 services:
-db:
-image: mysql
-environment:
-MYSQL_ROOT_PASSWORD: root_password
-MYSQL_DATABASE: test
-ports:
-- "3306:3306"
-volumes:
-- db_data:/var/lib/mysql
+  db:
+    image: mysql:8
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
 
-app:
-build: .
-ports:
-- "3000:3000"
-depends_on:
-- db
-environment:
-NODE_ENV: production
-PORT: 3000
-DB_USERNAME: root
-DB_PASSWORD: root_password
-DB_DATABASE: test
-DB_HOST: db
-DB_PORT: 3306
-DB_DIALECT: mysql
-SECRET_API_KEY: your_secret_key
-WAIT_FOR_DB: true
+  app:
+    image: votre_nom_d_utilisateur_dockerhub/api_projet_annuel
+    ports:
+      - "${PORT}:${PORT}"
+    env_file:
+      - .env
+    volumes:
+      - ./scripts:/app/scripts
+    depends_on:
+      - db
+    entrypoint: ["/app/scripts/wait-for-it.sh", "db:3306", "--"]
 
 volumes:
-db_data:
+  db_data:
 ```
 
-To start the application with Docker, run:
+2. **Démarrer les services avec Docker Compose**
 
-```sh
-docker-compose up --build
+```
+docker-compose up
 ```
 
-This will build the Docker images and start the services defined in the docker-compose.yml file.
+Cela démarrera les services définis dans le fichier `docker-compose.yml`, y compris l'API et la base de données MySQL.
+
+## Documentation Swagger
+
+La documentation Swagger est disponible à l'URL suivante une fois le serveur démarré :
+
+```
+http://localhost:3000/api-docs
+```
