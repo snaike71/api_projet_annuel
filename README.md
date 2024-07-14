@@ -28,6 +28,10 @@ DB_DIALECT=mysql
 
 # JWT Secret
 SECRET_API_KEY=your_secret_key
+
+# Control wait-for-it script usage
+WAIT_FOR_DB=true
+
 ```
 
 Renommez le fichier `.env.template` en `.env` et remplacez les valeurs par vos informations de configuration.
@@ -55,19 +59,6 @@ npm run start
 
 ## Lancer l'API avec Docker:
 
-### Créer une image Docker
-1. **Construire l'image Docker**
-
-```
-docker build -t votre_nom_d_utilisateur_dockerhub/api_projet_annuel .
-```
-
-2. **Pusher l'image Docker sur Docker Hub**
-
-```
-docker push votre_nom_d_utilisateur_dockerhub/api_projet_annuel
-```
-
 ### Utiliser Docker Compose
 1. **Configurer le fichier `docker-compose.yml`**
 
@@ -91,7 +82,7 @@ services:
       - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   app:
-    image: votre_nom_d_utilisateur_dockerhub/api_projet_annuel
+    image: snaike7/api_projet_annuel
     ports:
       - "${PORT}:${PORT}"
     env_file:
