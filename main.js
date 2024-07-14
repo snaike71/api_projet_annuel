@@ -39,7 +39,6 @@ app.get('/', (req, res) => {
   res.send('Welcome to the Node.js and Sequelize project!');
 });
 
-
 const connectToDatabase = async () => {
   await db.sequelize.authenticate();
   console.log('Connection has been established successfully.');
@@ -50,10 +49,9 @@ retry(
   async (bail) => {
     try {
       await connectToDatabase();
-      startServer();
     } catch (err) {
       console.error('Unable to connect to the database:', err);
-      if (err instanceof db.SequelizeConnectionError) {
+      if (err instanceof db.Sequelize.ConnectionError) {
         throw err;
       } else {
         bail(err);
@@ -65,9 +63,13 @@ retry(
     minTimeout: 1000, 
     maxTimeout: 5000, 
   }
-).catch((err) => {
-  console.error('Could not connect to the database after several attempts:', err);
-});
-
+)
+  .then(() => {
+    // Start the server after a successful database connection
+    const server = require('./server'); // This will start the server
+  })
+  .catch((err) => {
+    console.error('Could not connect to the database after several attempts:', err);
+  });
 
 module.exports = app;

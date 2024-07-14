@@ -24,7 +24,7 @@ services:
       - ./scripts:/app/scripts
     depends_on:
       - db
-    entrypoint: ["/app/scripts/wait-for-it.sh", "db:3306", "--"]
+    entrypoint: ["/app/scripts/wait-for-it.sh", "db:3306", "--", "npm", "run", "start"]
 
 volumes:
   db_data:
