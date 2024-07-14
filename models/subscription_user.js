@@ -16,11 +16,11 @@ module.exports = (sequelize, DataTypes) => {
       },
       start_date: DataTypes.DATE,
       end_date: DataTypes.DATE,
-      created_at: DataTypes.DATE,
-      updated_at: DataTypes.DATE
     }, {
       tableName: 'subscription_user',
-      timestamps: false
+      timestamps: true,
+      createdAt: 'created_at',
+      updatedAt: 'updated_at',
     });
   
     return SubscriptionUser;

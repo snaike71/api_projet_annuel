@@ -10,11 +10,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       },
       description: DataTypes.STRING,
-      created_at: DataTypes.DATE,
-      updated_at: DataTypes.DATE
     }, {
       tableName: 'genres',
-      timestamps: false
+      timestamps: true,
+      createdAt: 'created_at',
+      updatedAt: 'updated_at',
     });
   
     Genre.associate = function(models) {

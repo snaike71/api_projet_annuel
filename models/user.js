@@ -27,11 +27,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       },
       remember_token: DataTypes.STRING,
-      created_at: DataTypes.DATE,
-      updated_at: DataTypes.DATE
     }, {
       tableName: 'users',
-      timestamps: false
+      timestamps: true,
+      createdAt: 'created_at',
+      updatedAt: 'updated_at',
     });
   
     User.associate = function(models) {

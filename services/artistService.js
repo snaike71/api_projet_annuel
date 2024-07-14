@@ -16,7 +16,11 @@ class ArtistService {
   }
 
   static async getArtistById(id) {
-    return Artist.findByPk(id);
+    const artist = Artist.findByPk(id);
+    if (!artist) {
+      throw new Error('Artist not found');
+    }
+    return artist;
   }
 
   static async getMusicByArtistId(id) {

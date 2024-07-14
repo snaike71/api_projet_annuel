@@ -3,8 +3,10 @@ const ArtistService = require('../services/artistService');
 class ArtistController {
   static async getAllArtists(req, res) {
     try {
-      const page = parseInt(req.query.page, 10) || 1;
-      const { count, rows } = await ArtistService.getAllArtists(page);
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+
+      const { count, rows } = await ArtistService.getAllArtists(page, limit);
       res.status(200).json({
         total: count,
         page,

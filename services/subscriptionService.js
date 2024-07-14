@@ -8,7 +8,11 @@ class SubscriptionService {
   }
 
   static async getSubscriptionById(id) {
-    return Subscription.findByPk(id);
+    const subscription = Subscription.findByPk(id);
+    if (!subscription) {
+      throw new Error('Subscription not found');
+    }
+    return subscription;
   }
 }
 

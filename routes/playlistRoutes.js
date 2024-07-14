@@ -1,4 +1,3 @@
-// routes/playlistRoutes.js
 const express = require('express');
 const PlaylistController = require('../controllers/playlistController');
 const { authJwt } = require('../middleware/auth');
@@ -7,6 +6,7 @@ const { checkValidationErrors } = require('../middleware/validators');
 const router = express.Router();
 
 router.get('/',authJwt, checkValidationErrors, PlaylistController.getAllPlaylists);
+router.get('/user', authJwt, checkValidationErrors, PlaylistController.getUserPlaylists);
 router.get('/:id',authJwt, checkValidationErrors, PlaylistController.getPlaylistById);
 router.post('/',authJwt, checkValidationErrors, PlaylistController.createPlaylist);
 router.put('/:id',authJwt, checkValidationErrors, PlaylistController.updatePlaylist);

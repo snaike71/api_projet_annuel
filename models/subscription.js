@@ -13,11 +13,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false
       },
-      created_at: DataTypes.DATE,
-      updated_at: DataTypes.DATE
     }, {
       tableName: 'subscriptions',
-      timestamps: false
+      timestamps: true,
+      createdAt: 'created_at',
+      updatedAt: 'updated_at',
     });
   
     Subscription.associate = function(models) {

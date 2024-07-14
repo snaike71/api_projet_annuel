@@ -3,8 +3,9 @@ const AlbumService = require('../services/albumService');
 class AlbumController {
   static async getAllAlbums(req, res) {
     try {
-      const page = parseInt(req.query.page, 10) || 1;
-      const { count, rows } = await AlbumService.getAllAlbums(page);
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+      const { count, rows } = await AlbumService.getAllAlbums(page, limit);
       res.status(200).json({
         total: count,
         page,

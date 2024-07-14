@@ -41,9 +41,13 @@ class UserService {
   }
 
   static async getUserById(id) {
-    return User.findByPk(id, {
+    const user = User.findByPk(id, {
       include: [{ model: Playlist }]
     });
+    if (!user) {
+      throw new Error('User not found');
+    }
+    return user;
   }
 
   static async updateUser(id, data) {
@@ -58,11 +62,14 @@ class UserService {
     if (!_role) {
       throw new Error('Role not found');
     }
+    const valid = await bcrypt.compare(password, user.password);
+    if (!valid) {
+      throw new Error('Incorrect password');
+    }
 
     await user.update({
       name,
       email,
-      password,
       role_id: _role.id,
       updated_at: new Date()
     });
@@ -79,7 +86,7 @@ class UserService {
       }
     };
   }
-  
+
   static async getUserPlaylists(id) {
     return Playlist.findAll({ where: { user_id: id } });
   }
@@ -89,7 +96,18 @@ class UserService {
   }
 
   static async addUserLikedMusic(userId, musicId) {
-    return MusicUser.create({ user_id: userId, music_id: musicId });
+    try {
+      const existingEntry = await MusicUser.findOne({ where: { user_id: userId, music_id: musicId } });
+      if (existingEntry) {
+        throw new Error('Cette musique est déjà dans la liste des favoris');
+      }
+      
+      const result = await MusicUser.create({ user_id: userId, music_id: musicId });
+      return result;
+    } catch (error) {
+      console.error('Error adding liked music:', error);
+      throw error;
+    }
   }
 
   static async removeUserLikedMusic(userId, musicId) {

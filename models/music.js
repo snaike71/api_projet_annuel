@@ -12,11 +12,11 @@ module.exports = (sequelize, DataTypes) => {
     duration: DataTypes.BIGINT,
     play_count: DataTypes.BIGINT,
     release_date: DataTypes.DATE,
-    created_at: DataTypes.DATE,
-    updated_at: DataTypes.DATE
   }, {
     tableName: 'music',
-    timestamps: false
+    timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
   });
 
   Music.associate = function(models) {

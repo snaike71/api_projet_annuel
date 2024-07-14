@@ -12,7 +12,11 @@ class AlbumService {
   }
 
   static async getAlbumById(id) {
-    return Album.findByPk(id);
+    const album = Album.findByPk(id);
+    if (!album) {
+      throw new Error('Album not found');
+    }
+    return album;
   }
 
   static async getMusicByAlbumId(id) {

@@ -8,7 +8,11 @@ class GenreService {
   }
 
   static async getGenreById(id) {
-    return Genre.findByPk(id);
+    const genre = Genre.findByPk(id);
+    if (!genre) {
+      throw new Error('Genre not found');
+    }
+    return genre;
   }
 
   static async getMusicByGenreId(id) {

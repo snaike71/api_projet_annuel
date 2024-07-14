@@ -1,4 +1,3 @@
-// controllers/UserController.js
 const UserService = require('../services/userService');
 
 class UserController {
@@ -52,7 +51,8 @@ class UserController {
 
   static async addUserLikedMusic(req, res) {
     try {
-      await UserService.addUserLikedMusic(req.params.id, req.body.music_id);
+      const userId = res.locals.decodedToken.user_id;
+      await UserService.addUserLikedMusic(userId, req.body.music_id);
       res.status(201).json({ message: 'Musique ajoutée à la liste des favoris avec succès' });
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -61,7 +61,8 @@ class UserController {
 
   static async removeUserLikedMusic(req, res) {
     try {
-      await UserService.removeUserLikedMusic(req.params.id, req.params.music_id);
+      const userId = res.locals.decodedToken.user_id;
+      await UserService.removeUserLikedMusic(userId, req.params.music_id);
       res.status(200).json({ message: 'Musique supprimée de la liste des favoris avec succès' });
     } catch (error) {
       res.status(400).json({ error: error.message });
