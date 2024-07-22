@@ -11,6 +11,7 @@
  *           type: string
  *         email:
  *           type: string
+ *           format: email
  *         email_verified_at:
  *           type: string
  *           format: date-time
@@ -27,6 +28,12 @@
  *               type: integer
  *             name:
  *               type: string
+ *         subscription:
+ *           type: string
+ *         Playlists:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/Playlist'
  *     Playlist:
  *       type: object
  *       properties:
@@ -42,13 +49,6 @@
  *         updated_at:
  *           type: string
  *           format: date-time
- *         creator:
- *           type: object
- *           properties:
- *             id:
- *               type: integer
- *             name:
- *               type: string
  *     Music:
  *       type: object
  *       properties:

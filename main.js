@@ -17,7 +17,6 @@ const authRoutes = require('./routes/authRoutes');
 const musicRoutes = require('./routes/musicRoutes');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -65,8 +64,6 @@ retry(
   }
 )
   .then(() => {
-    // Start the server after a successful database connection
-    const server = require('./server'); // This will start the server
   })
   .catch((err) => {
     console.error('Could not connect to the database after several attempts:', err);

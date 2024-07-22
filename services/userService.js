@@ -1,4 +1,4 @@
-const { User, Playlist, MusicUser, Role } = require('../models');
+const { User, Playlist, MusicUser, Role,SubscriptionUser,Subscription } = require('../models');
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 
@@ -41,14 +41,31 @@ class UserService {
   }
 
   static async getUserById(id) {
-    const user = User.findByPk(id, {
-      include: [{ model: Playlist }]
+    const user = await User.findByPk(id, {
+      include: [
+        { model: Playlist },
+        { 
+          model: SubscriptionUser,
+          include: [{ 
+            model: Subscription,
+            attributes: [['name', 'subscription']]
+          }]
+        }
+      ]
     });
     if (!user) {
       throw new Error('User not found');
     }
-    return user;
+  
+    const userData = user.toJSON();
+    console.log(userData)
+    userData.subscription = (userData.SubscriptionUsers && userData.SubscriptionUsers.length > 0) ? userData.SubscriptionUsers[0].Subscription.subscription : null;
+    delete userData.SubscriptionUsers;
+    
+    return userData;
   }
+  
+  
 
   static async updateUser(id, data) {
     const { name, email, password, role } = data;

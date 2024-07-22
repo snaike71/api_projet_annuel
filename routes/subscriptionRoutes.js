@@ -6,5 +6,6 @@ const router = express.Router();
 
 router.get('/',authJwt, checkValidationErrors, SubscriptionController.getAllSubscriptions);
 router.get('/:id',authJwt, checkValidationErrors, SubscriptionController.getSubscriptionById);
+router.post('/subscribe', authJwt, checkValidationErrors, SubscriptionController.subscribeUser);
 
 module.exports = router;
